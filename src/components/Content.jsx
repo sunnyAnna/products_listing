@@ -1,4 +1,5 @@
 import React from 'react';
+import Picture from './Picture';
 
 export default class Content extends React.Component {
 
@@ -30,10 +31,9 @@ export default class Content extends React.Component {
 
 	displayProducts(products){
 		let items = products.map(function(item, index){
-			// TODO: add sizes to img
 			return (
 				<li key={index}>
-					<img src={item.mainImage.ref}/>
+					<Picture image={item.mainImage} name={item.name}/>
 					<p>{item.name}</p>
 					<p>{item.msrpInCents / 100}</p>
 				</li>
