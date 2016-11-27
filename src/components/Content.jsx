@@ -1,16 +1,24 @@
 import React from 'react';
-import Picture from './Picture';
+import ProductsList from './ProductsList';
+import FiltersList from './FiltersList';
 
 export default class Content extends React.Component {
 
-	constructor(){
-		super();
-		this.state = {items:[]};
+	constructor(props){
+		super(props);
+		this.state = {
+			items:[]
+		};
+		this.itemList = [];
+		this.activeFilters = [];
 		this.getProducts = this.getProducts.bind(this);
-		this.displayProducts = this.displayProducts.bind(this);
+		this.sendProductsRequest = this.sendProductsRequest.bind(this);
+		this.displayAllProducts = this.displayAllProducts.bind(this);
+		this.toggleFilter = this.toggleFilter.bind(this);
+		this.isPriced = this.isPriced.bind(this);
 	}
 
-	getProducts(url){
+	sendProductsRequest(url){
 		return (
 			new Promise(function(resolve, reject) {
 				var req = new XMLHttpRequest();
@@ -29,35 +37,54 @@ export default class Content extends React.Component {
 		)
 	}
 
-	displayProducts(products){
-		let items = products.map(function(item, index){
-			return (
-				<li key={index}>
-					<Picture image={item.mainImage} name={item.name}/>
-					<p>{item.name}</p>
-					<p>{item.msrpInCents / 100}</p>
-				</li>
-			)
-		})
+	getProducts(products){
+		return this.itemList = products.map((item, index)=>({image: item.mainImage, name: item.name, price: item.msrpInCents / 100}))
+	}
 
-		return this.setState({items: <ul>{items}</ul>})
+	displayAllProducts(){
+		this.activeFilters = [];
+		return this.setState({items:this.itemList})
+	}
+
+	isPriced(obj){
+		return obj.price < this.activeFilters[0]
+	}
+
+	toggleFilter(price){
+		let filters = this.activeFilters,
+			elem = filters.indexOf(price)
+		if (elem===-1 && price < filters[0] || filters.length==0) {
+			filters.unshift(price)
+		} else if (elem!==-1) {
+			filters.splice(elem,1)
+		} else {
+			return
+		}
+
+		let items = this.itemList
+		items = filters.length>0 ? items.filter(this.isPriced) : items
+		return this.setState({items})
 	}
 
 	componentWillMount(){
 		let that = this
-		this.getProducts('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js').then(function(response) {
-			let data = JSON.parse(response)
-			that.displayProducts(data.products);
+		this.sendProductsRequest('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js').then(JSON.parse).then(function(response){
+			that.getProducts(response.products);
+		}).then(function(response){
+			that.displayAllProducts();
 		}).catch(function(error) {
 			console.log("Failed!", error);
 		})
 	}
 
 	render() {
+
 		return (
 			<div>
-				{this.state.items}
+				<FiltersList applyFilter={this.toggleFilter} reset={this.displayAllProducts}/>
+				<ProductsList list={this.state.items}/>
 			</div>
 		)
 	}
 }
+
