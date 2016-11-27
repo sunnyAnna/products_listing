@@ -1,4 +1,5 @@
 import React from 'react';
+import Content from './Content';
 
 export default class App extends React.Component {
 
@@ -6,7 +7,7 @@ export default class App extends React.Component {
 		return (
 			<div>
 				<header></header>
-				<main></main>
+				<Content/>
 				<footer></footer>
 			</div>
 		)
