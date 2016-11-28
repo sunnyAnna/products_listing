@@ -11,6 +11,7 @@ export default class Content extends React.Component {
 		};
 		this.itemList = [];
 		this.activeFilters = [];
+		this.activeSort = '';
 		this.getProducts = this.getProducts.bind(this);
 		this.sendProductsRequest = this.sendProductsRequest.bind(this);
 		this.displayAllProducts = this.displayAllProducts.bind(this);
@@ -84,6 +85,7 @@ export default class Content extends React.Component {
 
 	sort(rule){
 		let items = this.state.items
+		this.activeSort = rule
 		if(typeof items[0][rule] !== 'number'){
 			items = items.sort((a,b)=>a[rule]>b[rule])
 		}else{
@@ -112,12 +114,14 @@ export default class Content extends React.Component {
 					subtitle='Under $'
 					filters={this.props.filterPrices}
 					applyFilter={this.toggleFilter}
-					reset={this.displayAllProducts}/>
+					reset={this.displayAllProducts}
+					active={this.activeFilters}/>
 				<FiltersList
 					title='Sort by: '
 					filters={this.props.sortCriteria}
 					applyFilter={this.sort}
-					reset={this.displayAllProducts}/>
+					reset={this.displayAllProducts}
+					active={this.activeSort}/>
 				<ProductsList list={this.state.items}/>
 			</div>
 		)
@@ -131,6 +135,6 @@ Content.propTypes = {
 
 Content.defaultProps = {
 	filterPrices: [10,25,35],
-	sortCriteria: ['name', 'price', 'date']
+	sortCriteria: ['name','price','date']
 }
 

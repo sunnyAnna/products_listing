@@ -5,10 +5,11 @@ export default class FiltersList extends React.Component {
 	render() {
 		let filters = this.props.filters,
 			subtitle = this.props.subtitle || ''
+		console.log('active: '+this.props.active)
 		filters = filters.map((val,index)=>
 			(<li key={index}
 				onClick={()=>this.props.applyFilter(val)}>
-				<p>{subtitle + val}</p>
+				<p className={this.props.active.indexOf(val) !== -1 ? 'active' : null}>{subtitle + val}</p>
 			</li>)
 		)
 
