@@ -5,7 +5,7 @@ export default class FiltersList extends React.Component {
 	render() {
 		let filters = this.props.filters,
 			subtitle = this.props.subtitle || ''
-		console.log('active: '+this.props.active)
+
 		filters = filters.map((val,index)=>
 			(<li key={index}
 				onClick={()=>this.props.applyFilter(val)}>

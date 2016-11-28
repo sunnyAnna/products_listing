@@ -108,7 +108,7 @@ export default class Content extends React.Component {
 	render() {
 
 		return (
-			<div>
+			<main>
 				<FiltersList
 					title='Filter by price: '
 					subtitle='Under $'
@@ -123,7 +123,7 @@ export default class Content extends React.Component {
 					reset={this.displayAllProducts}
 					active={this.activeSort}/>
 				<ProductsList list={this.state.items}/>
-			</div>
+			</main>
 		)
 	}
 }

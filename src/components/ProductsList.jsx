@@ -5,13 +5,15 @@ export default class ProductsList extends React.Component {
 
 	render() {
 		let items = this.props.list.map((item,index)=>
-			(<li key={index}>
+			(<li key={index} className='products__list__item'>
 				<Picture image={item.image} name={item.name}/>
-				<p>{item.name}</p>
-				<p>{item.price}</p>
+				<div>
+					<p className='product__name'>{item.name}</p>
+					<p className='product__price'>${item.price}</p>
+				</div>
 			</li>)
 		)
 
-		return <ul>{items}</ul>
+		return <ul className='products__list'>{items}</ul>
 	}
 }
