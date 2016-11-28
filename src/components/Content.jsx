@@ -16,6 +16,8 @@ export default class Content extends React.Component {
 		this.displayAllProducts = this.displayAllProducts.bind(this);
 		this.toggleFilter = this.toggleFilter.bind(this);
 		this.isPriced = this.isPriced.bind(this);
+		this.sort = this.sort.bind(this);
+		this.cleanUpName = this.cleanUpName.bind(this);
 	}
 
 	sendProductsRequest(url){
@@ -38,7 +40,12 @@ export default class Content extends React.Component {
 	}
 
 	getProducts(products){
-		return this.itemList = products.map((item, index)=>({image: item.mainImage, name: item.name, price: item.msrpInCents / 100}))
+		return this.itemList = products.map((item, index)=>(
+			{image: item.mainImage,
+			name: this.cleanUpName(item.name.toUpperCase()),
+			price: item.msrpInCents / 100,
+			date: item.createdAt}
+		))
 	}
 
 	displayAllProducts(){
@@ -66,6 +73,25 @@ export default class Content extends React.Component {
 		return this.setState({items})
 	}
 
+	cleanUpName(elem){
+		elem = elem.split(' ')
+		if (parseFloat(elem[0],10)){
+			let num = elem.shift()
+			elem.push(num)
+		}
+		return elem.join(' ')
+	}
+
+	sort(rule){
+		let items = this.state.items
+		if(typeof items[0][rule] !== 'number'){
+			items = items.sort((a,b)=>a[rule]>b[rule])
+		}else{
+			items = items.sort((a,b)=>(parseFloat(a[rule],10)-parseFloat(b[rule],10)))
+		}
+		return this.setState({items})
+	}
+
 	componentWillMount(){
 		let that = this
 		this.sendProductsRequest('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js').then(JSON.parse).then(function(response){
@@ -81,10 +107,30 @@ export default class Content extends React.Component {
 
 		return (
 			<div>
-				<FiltersList applyFilter={this.toggleFilter} reset={this.displayAllProducts}/>
+				<FiltersList
+					title='Filter by price: '
+					subtitle='Under $'
+					filters={this.props.filterPrices}
+					applyFilter={this.toggleFilter}
+					reset={this.displayAllProducts}/>
+				<FiltersList
+					title='Sort by: '
+					filters={this.props.sortCriteria}
+					applyFilter={this.sort}
+					reset={this.displayAllProducts}/>
 				<ProductsList list={this.state.items}/>
 			</div>
 		)
 	}
+}
+
+Content.propTypes = {
+	filterPrices: React.PropTypes.array,
+	sortCriteria: React.PropTypes.array
+};
+
+Content.defaultProps = {
+	filterPrices: [10,25,35],
+	sortCriteria: ['name', 'price', 'date']
 }
 
