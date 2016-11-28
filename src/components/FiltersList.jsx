@@ -4,19 +4,28 @@ export default class FiltersList extends React.Component {
 
 	render() {
 		let filters = this.props.filters,
-			subtitle = this.props.subtitle || ''
+			subtitle = this.props.subtitle || '',
+			resetFunc = this.props.reset
 
 		filters = filters.map((val,index)=>
 			(<li key={index}
-				onClick={()=>this.props.applyFilter(val)}>
-				<p className={this.props.active.indexOf(val) !== -1 ? 'active' : null}>{subtitle + val}</p>
+				className='filters__list__item'>
+				<a href='#'
+					className={this.props.active.indexOf(val) !== -1 ? 'active' : 'passive'}
+					onClick={(e)=>this.props.applyFilter(e,val)}>
+					{subtitle + val}
+				</a>
 			</li>)
 		)
 
-		return (<div>
-					<p>{this.props.title}</p>
-					<ul>{filters}</ul>
-					<p onClick={this.props.reset}>Reset</p>
+		return (<div className='filters__container'>
+					{resetFunc ? <button
+						className='button--reset'
+						onClick={resetFunc}>
+						Reset
+					</button> : null}
+					<p className='filters__list__title'>{this.props.title}</p>
+					<ul className={['filters__list--', this.props.className].join('')}>{filters}</ul>
 				</div>)
 	}
 }

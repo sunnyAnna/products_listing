@@ -58,7 +58,8 @@ export default class Content extends React.Component {
 		return obj.price < this.activeFilters[0]
 	}
 
-	toggleFilter(price){
+	toggleFilter(e,price){
+		e.preventDefault()
 		let filters = this.activeFilters,
 			elem = filters.indexOf(price)
 		if (elem===-1 && price < filters[0] || filters.length==0) {
@@ -83,7 +84,8 @@ export default class Content extends React.Component {
 		return elem.join(' ')
 	}
 
-	sort(rule){
+	sort(e,rule){
+		e.preventDefault()
 		let items = this.state.items
 		this.activeSort = rule
 		if(typeof items[0][rule] !== 'number'){
@@ -112,15 +114,16 @@ export default class Content extends React.Component {
 				<FiltersList
 					title='Filter by price: '
 					subtitle='Under $'
+					className='price'
 					filters={this.props.filterPrices}
 					applyFilter={this.toggleFilter}
 					reset={this.displayAllProducts}
 					active={this.activeFilters}/>
 				<FiltersList
 					title='Sort by: '
+					className='sort'
 					filters={this.props.sortCriteria}
 					applyFilter={this.sort}
-					reset={this.displayAllProducts}
 					active={this.activeSort}/>
 				<ProductsList list={this.state.items}/>
 			</main>
