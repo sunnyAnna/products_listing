@@ -7,7 +7,8 @@ export default class App extends React.Component {
 		return (
 			<div>
 				<header>
-					<h1>Fiji water accessories</h1>
+					<h1>Fiji water</h1>
+					<p>accessories</p>
 				</header>
 				<Content/>
 				<footer></footer>

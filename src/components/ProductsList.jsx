@@ -14,6 +14,8 @@ export default class ProductsList extends React.Component {
 			</li>)
 		)
 
-		return <ul className='products__list'>{items}</ul>
+		return (<div className='products__container'>
+					<ul className='products__list'>{items}</ul>
+				</div>)
 	}
 }
