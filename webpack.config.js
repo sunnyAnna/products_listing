@@ -54,6 +54,11 @@ module.exports = {
 				}
 			 },
 			{
+				test: /\.jsx?$/,
+				exclude: /node_modules/,
+				loader: 'eslint-loader'
+			},
+			{
 				test: /\.html$/,
 				loader: "html"
 			},
@@ -62,6 +67,9 @@ module.exports = {
 				loader: extractor.extract("style-loader", "css-loader")
 			}
 		]
+	},
+	eslint: {
+		configFile: './.eslintrc'
 	},
 	resolve: {
 		extensions: ['', '.js', '.jsx']
