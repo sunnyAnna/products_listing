@@ -2,4 +2,4 @@
 /webpack.config.js
 /package.json
 /.eslintrc
-/dest/styles.bundle.js
+/dest/style.bundle.js
