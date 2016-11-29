@@ -4,7 +4,7 @@ Products display page. Fetches products from an external file and allows you to 
 
 ### INSTRUCTIONS
 
-The project is being hosted on [this page].
+The project is being hosted on [this page](https://sunnyanna.github.io/products_listing/dest/).
 
 Click on one of the filters and/or sorters to apply them to the products.
 

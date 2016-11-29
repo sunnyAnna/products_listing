@@ -124,7 +124,7 @@ export default class Content extends React.Component {
 	*/
 	componentWillMount(){
 		let that = this
-		this.sendProductsRequest('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js')
+		this.sendProductsRequest('https://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js')
 			.then(JSON.parse)
 			.then(function(response){that.getProducts(response.products)})
 			.then(()=>that.displayAllProducts())
