@@ -6,7 +6,9 @@ export default class FiltersList extends React.Component {
 		let filters = this.props.filters,
 			subtitle = this.props.subtitle || '',
 			resetFunc = this.props.reset
-
+		/**
+		 * @description Switches filter class depending on filter's activity status.
+		 */
 		filters = filters.map((val,index)=>
 			(<li key={index}
 				className='filters__list__item'>

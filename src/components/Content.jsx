@@ -20,7 +20,10 @@ export default class Content extends React.Component {
 		this.sort = this.sort.bind(this);
 		this.cleanUpName = this.cleanUpName.bind(this);
 	}
-
+	/**
+	* @description Calls the API.
+	* @param {string} url
+	*/
 	sendProductsRequest(url){
 		return (
 			new Promise(function(resolve, reject) {
@@ -33,31 +36,45 @@ export default class Content extends React.Component {
 						reject(Error(req.statusText));
 					}};
 				req.onerror = function() {
-					reject(Error("Network Error"));
+					reject(Error('Network Error'));
 				};
 				req.send()
 			})
 		)
 	}
-
+	/**
+	* @description Creates a list of products.
+	* @param {object} products - API call result
+	*/
 	getProducts(products){
-		return this.itemList = products.map((item, index)=>(
+		return this.itemList = products.map(item=>(
 			{image: item.mainImage,
 			name: this.cleanUpName(item.name.toUpperCase()),
 			price: item.msrpInCents / 100,
 			date: item.createdAt}
 		))
 	}
-
+	/**
+	* @description Displays full products list.
+	* @returns {function}
+	*/
 	displayAllProducts(){
 		this.activeFilters = [];
 		return this.setState({items:this.itemList})
 	}
-
+	/**
+	* @description Checks for price match.
+	* @param {object} obj - element to check
+	* @returns {object}
+	*/
 	isPriced(obj){
 		return obj.price < this.activeFilters[0]
 	}
-
+	/**
+	* @description Toggles price filters. Displays products based on the result of filtering.
+	* @param {object} e - event, price - filter rule chosen by user
+	* @returns {function}
+	*/
 	toggleFilter(e,price){
 		e.preventDefault()
 		let filters = this.activeFilters,
@@ -69,12 +86,15 @@ export default class Content extends React.Component {
 		} else {
 			return
 		}
-
 		let items = this.itemList
 		items = filters.length>0 ? items.filter(this.isPriced) : items
 		return this.setState({items})
 	}
-
+	/**
+	* @description Moves number-containing words from the beginning of the name to its end.
+	* @param {object} elem - product's name
+	* @returns {object}
+	*/
 	cleanUpName(elem){
 		elem = elem.split(' ')
 		if (parseFloat(elem[0],10)){
@@ -83,7 +103,11 @@ export default class Content extends React.Component {
 		}
 		return elem.join(' ')
 	}
-
+	/**
+	* @description Sorts and displays products based on the result of sorting.
+	* @param {object} e - event, rule - sorting rule chosen by user
+	* @returns {function}
+	*/
 	sort(e,rule){
 		e.preventDefault()
 		let items = this.state.items
@@ -95,20 +119,19 @@ export default class Content extends React.Component {
 		}
 		return this.setState({items})
 	}
-
+	/**
+	* @description Initiates the API call and directs its response.
+	*/
 	componentWillMount(){
 		let that = this
-		this.sendProductsRequest('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js').then(JSON.parse).then(function(response){
-			that.getProducts(response.products);
-		}).then(function(response){
-			that.displayAllProducts();
-		}).catch(function(error) {
-			console.log("Failed!", error);
-		})
+		this.sendProductsRequest('http://sneakpeeq-sites.s3.amazonaws.com/interviews/ce/feeds/store.js')
+			.then(JSON.parse)
+			.then(function(response){that.getProducts(response.products)})
+			.then(()=>that.displayAllProducts())
+			.catch(function(error) {console.log('Failed!', error)})
 	}
 
 	render() {
-
 		return (
 			<main>
 				<FiltersList

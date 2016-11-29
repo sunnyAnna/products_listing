@@ -1,7 +1,10 @@
 import React from 'react';
 
 const Picture = function({image,name}){
-	let images = image.meta.map(function(item,index){
+	/**
+	 * @description Creates a list of images for srcSet.
+	 */
+	let images = image.meta.map(function(item){
 		if (item.hasOwnProperty('key')) {
 			return item.key == 'medium' ? `${item.value} 400w` : item.key == 'large' ? `${item.value} 300w` : null
 		}
